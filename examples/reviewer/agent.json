@@ -1,0 +1,5 @@
+{
+  "task_name_suffix": "Reviewer",
+  "startup_delay_sec": 150,
+  "description": "Reviews AI-authored PRs and merges good ones. Optionally cuts releases."
+}

@@ -1,0 +1,5 @@
+{
+  "task_name_suffix": "Manager",
+  "startup_delay_sec": 60,
+  "description": "Triages email + GitHub notifications. Dispatches by creating issues in product repos."
+}

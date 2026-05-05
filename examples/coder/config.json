@@ -1,0 +1,44 @@
+{
+  "_comment": "Pick a unique mcp_port if you run multiple agents (each needs its own). The github watcher repos and the --add-dir path must match what your CLAUDE.md says.",
+  "claude": {
+    "model": "opus",
+    "additional_args": [
+      "--add-dir",
+      "[/PATH/TO/LOCAL/CLONE]"
+    ]
+  },
+  "runner": {
+    "mcp_port": 9301,
+    "log_level": "INFO"
+  },
+  "plugins": {
+    "inbox": {
+      "enabled": true,
+      "path": "state/inbox.jsonl",
+      "poll_sec": 2,
+      "default_source": "user"
+    },
+    "github": {
+      "enabled": true,
+      "notifications": {
+        "enabled": false
+      },
+      "watchers": [
+        {
+          "name": "assigned-issues",
+          "kind": "issues",
+          "repo": "[YOUR_ORG]/[YOUR_REPO]",
+          "filter": "--search assignee:@me --state open",
+          "poll_sec": 90
+        },
+        {
+          "name": "pr-comments",
+          "kind": "pulls",
+          "repo": "[YOUR_ORG]/[YOUR_REPO]",
+          "filter": "--search author:@me --state open",
+          "poll_sec": 240
+        }
+      ]
+    }
+  }
+}

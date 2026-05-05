@@ -1,0 +1,5 @@
+{
+  "task_name_suffix": "Coder",
+  "startup_delay_sec": 90,
+  "description": "Single-repo coder. Watches assigned issues, branches, codes, tests, opens PRs."
+}

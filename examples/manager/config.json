@@ -1,0 +1,57 @@
+{
+  "_comment": "Manager is fine on sonnet -- triage is fast and benefits from low latency. The github watchers below are examples; add or remove based on which repos you actually want triaged.",
+  "claude": {
+    "model": "sonnet",
+    "additional_args": []
+  },
+  "runner": {
+    "mcp_port": 9303,
+    "log_level": "INFO"
+  },
+  "plugins": {
+    "inbox": {
+      "enabled": true,
+      "path": "state/inbox.jsonl",
+      "poll_sec": 2,
+      "default_source": "user"
+    },
+    "outlook": {
+      "_comment": "Drop this whole section if you don't want email triage. Update mcp_command path to wherever your Outlook MCP server is installed.",
+      "enabled": false,
+      "poll_sec": 120,
+      "mcp_command": [
+        "[/PATH/TO/outlook-mcp-server.exe]"
+      ]
+    },
+    "github": {
+      "enabled": true,
+      "notifications": {
+        "enabled": true,
+        "poll_sec": 180
+      },
+      "watchers": [
+        {
+          "name": "central-mentions",
+          "kind": "issues",
+          "repo": "[ORG]/[CENTRAL_REPO]",
+          "filter": "--search \"assignee:@me OR mentions:@me\" --state all",
+          "poll_sec": 180
+        },
+        {
+          "name": "product1-assigned",
+          "kind": "issues",
+          "repo": "[ORG]/[PRODUCT_REPO_1]",
+          "filter": "--search assignee:@me --state open",
+          "poll_sec": 240
+        },
+        {
+          "name": "product2-assigned",
+          "kind": "issues",
+          "repo": "[ORG]/[PRODUCT_REPO_2]",
+          "filter": "--search assignee:@me --state open",
+          "poll_sec": 240
+        }
+      ]
+    }
+  }
+}

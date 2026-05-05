@@ -1,0 +1,18 @@
+# Local state any user might generate while testing
+state/
+*.local.json
+*.local.ps1
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# Python (in case anyone drops a venv inside)
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+Thumbs.db
+.DS_Store
