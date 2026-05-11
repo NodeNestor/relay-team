@@ -249,8 +249,13 @@ function Cmd-Start {
     $cfg = Get-RelayTeamConfig
     if (-not $AgentName) {
         $agents = Discover-Agents $cfg.relay_root
-        Write-Host "Starting all $($agents.Count) discovered agents in separate windows..." -ForegroundColor Cyan
+        Write-Host "Starting $($agents.Count) discovered agents in separate windows (skipping any already running)..." -ForegroundColor Cyan
         foreach ($agent in $agents) {
+            $existing = @(Get-AgentProcess -Cfg $cfg -Agent $agent)
+            if ($existing.Count -gt 0) {
+                Write-Host "  - $agent already running (pid $($existing[0].ProcessId)) -- skipped" -ForegroundColor Gray
+                continue
+            }
             $startScript = Join-Path (Join-Path $cfg.relay_root $agent) "start.ps1"
             Start-Process powershell.exe -ArgumentList @("-NoProfile", "-File", $startScript) -WindowStyle Normal
             Write-Host "  [ok] spawned $agent" -ForegroundColor Green
@@ -258,6 +263,11 @@ function Cmd-Start {
         return
     }
     $agent = Resolve-Agent -Cfg $cfg -Name $AgentName
+    $existing = @(Get-AgentProcess -Cfg $cfg -Agent $agent)
+    if ($existing.Count -gt 0) {
+        Write-Host "$agent is already running (pid $($existing[0].ProcessId)). Use 'relay-team restart $agent' to relaunch." -ForegroundColor Yellow
+        return
+    }
     $startScript = Join-Path (Join-Path $cfg.relay_root $agent) "start.ps1"
     Write-Host "Starting $agent (foreground)..." -ForegroundColor Cyan
     & $startScript
